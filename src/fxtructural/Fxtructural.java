@@ -47,7 +47,7 @@ import org.controlsfx.dialog.Dialogs;
  * @author jmiguel
  */
 public class Fxtructural extends Application {
-    private double Double;
+
     private double xOffset = 0;
     private double yOffset = 0;
     
@@ -163,22 +163,55 @@ public class Fxtructural extends Application {
         DecimalFormatSymbols simbolo=new DecimalFormatSymbols();
         simbolo.setDecimalSeparator('.');
         simbolo.setGroupingSeparator(',');
-        DecimalFormat df = new DecimalFormat("#.00", simbolo);
-
+        DecimalFormat df = new DecimalFormat("#.000", simbolo);
+        
+        double producto[] = new double[7];
+        
         double x1 = parseDouble(txtPx.getText());
+        producto[1] = x1;
         double y1 = parseDouble(txtPy.getText());
+        producto[2] = y1;
         double z1 = parseDouble(txtPz.getText());
+        producto[3] = z1;
+        
+        double x2 = parseDouble(txtPx2.getText());
+        double y2 = parseDouble(txtPy2.getText());
+        double z2 = parseDouble(txtPz2.getText());
+        
+        double brazoi = parseDouble(df.format((x1-x2)));
+        double brazoj = parseDouble(df.format((y1-y2)));
+        double brazok = parseDouble(df.format((z1-z2)));
         
         double fuerza = parseDouble(txtFuerza.getText());
         
-        double modulo = Math.sqrt(Math.pow(x1,2)+Math.pow(y1,2)+Math.pow(z1,2));
+        double modulo = Math.sqrt(Math.pow(brazoi,2)+Math.pow(brazoj,2)+Math.pow(brazok,2));
         
-        double lambdax = fuerza*(x1/modulo);
-        double lambday = fuerza*(y1/modulo);
-        double lambdaz = fuerza*(z1/modulo);
+        double modulof = parseDouble(df.format(modulo));
+        
+        double lambdax = fuerza*(brazoi/modulof);
+        producto[4] = lambdax;
+        double lambday = fuerza*(brazoj/modulof);
+        producto[5] = lambday;
+        double lambdaz = fuerza*(brazok/modulof);
+        producto[6] = lambdaz;
+        
+        double rProducto1i = (producto[2]*producto[6]);
+        double rProducto1j = (producto[3]*producto[4]);
+        double rProducto1k = (producto[1]*producto[5]);
+        
+        double rProducto2i = (producto[3]*producto[5]);
+        double rProducto2j = (producto[1]*producto[6]);
+        double rProducto2k = (producto[2]*producto[4]);
+        
+        double momentoi = (rProducto1i-rProducto2i);
+        double momentoj = (rProducto1j-rProducto2j);
+        double momentok = (rProducto1k-rProducto2k);
         
         System.out.println("El lambda es: "+df.format(lambdax) +","+df.format(lambday)+","+df.format(lambdaz));
-        
+        System.out.println("Modulo: "+modulof);
+        System.out.println(brazoi+"i + "+brazoj+"j + "+brazok+"k");
+        System.out.println(lambdax+"i + "+lambday+"j + "+lambdaz+"k");
+        System.out.println(momentoi+"i + "+momentoj+"j + "+momentok+"k");
             
         Action response = Dialogs.create()
             .title("Respuesta")
@@ -270,8 +303,5 @@ public class Fxtructural extends Application {
         launch(args);
     }
 
-    private void parsDouble(String text) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
     
 }
