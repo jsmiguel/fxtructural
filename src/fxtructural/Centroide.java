@@ -20,6 +20,8 @@ package fxtructural;
 
 import static java.lang.Double.parseDouble;
 import static java.lang.Integer.parseInt;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -79,8 +81,19 @@ public class Centroide extends VBox {
     final TextField txtDistanciax = new TextField();
     final TextField txtDistanciay = new TextField();
     
+    final Label lblAreas = new Label();
+    final Label lblAreasx = new Label();
+    final Label lblAreasy = new Label();
+    final Label lblCentroideX = new Label();
+    final Label lblCentroideY = new Label();
+    
     public VBox Centroide(){
-   
+        
+        DecimalFormatSymbols simbolo=new DecimalFormatSymbols();
+            simbolo.setDecimalSeparator('.');
+            simbolo.setGroupingSeparator(',');
+            DecimalFormat df = new DecimalFormat("0.0#", simbolo);
+            
         VBox vbCentroides = new VBox();
         
         Rectangle rect = new Rectangle();
@@ -101,6 +114,7 @@ public class Centroide extends VBox {
         TextField txtCir = new TextField();
         txtCir.setPromptText("0");
         txtCir.setMaxWidth(50);
+        txtCir.setDisable(true);
                 
         Image imgTri = new Image("img/tri.png");
         ImageView imgViewTri = new ImageView(imgTri);
@@ -117,12 +131,20 @@ public class Centroide extends VBox {
         hbImg.setSpacing(5);
         
         
+        
+        VBox hvDetalle = new VBox();
+        hvDetalle.getChildren().addAll(lblAreas, lblAreasx, lblAreasy);
+        hvDetalle.setPadding(new Insets(15, 0, 15, 0));
+        hvDetalle.setAlignment(Pos.BASELINE_CENTER);
+        hvDetalle.setSpacing(10);
+        
+        
         Button btnIniciar = new Button("Iniciar");
         btnIniciar.setFont(metroFont);
         btnIniciar.getStyleClass().add("btn");
         btnIniciar.setAlignment(Pos.CENTER);
         
-        vbCentroides.getChildren().addAll(hbImg, btnIniciar);
+        vbCentroides.getChildren().addAll(hbImg, btnIniciar, hvDetalle, lblCentroideX, lblCentroideY);
         vbCentroides.setPadding(new Insets(15, 12, 15, 12));
         vbCentroides.setAlignment(Pos.TOP_CENTER);
         vbCentroides.setSpacing(10);
@@ -135,12 +157,6 @@ public class Centroide extends VBox {
             sumatoriaAreas = 0.0;
             sumatoriaAx = 0.0;
             sumatoriaAy = 0.0;
-            
-            if (datosRect != null & datosCir != null & datosTri != null) {
-                System.out.println("LLenos");
-            } else {
-                System.out.println("Vacios");
-            }
             
             if (datosRect != null & datosCir != null & datosTri != null) {
                 int cantidad = datosRect.length+datosCir.length+datosTri.length;
@@ -245,7 +261,7 @@ public class Centroide extends VBox {
                     System.out.println("Elemento en indice " + i + ": " + centrosFiguras[i]);
                 }
                 
-            } else {
+            } 
             
                 if (datosRect != null && datosTri != null) {
                     int cantidad = datosRect.length+datosTri.length;
@@ -314,15 +330,12 @@ public class Centroide extends VBox {
                         sumatoriaAx = sumatoriaAx+(parseDouble(xRectangulox)*areaR);
                         sumatoriaAy = sumatoriaAy+(parseDouble(yRectanguloy)*areaR);
                     } else {
-                        sumatoriaAx = sumatoriaAx+(parseDouble(xRectangulox)*(-areaR));
-                        sumatoriaAy = sumatoriaAx+(parseDouble(yRectanguloy)*(-areaR));
+                        sumatoriaAx = sumatoriaAx+(parseDouble(xRectangulox)*-areaR);
+                        sumatoriaAy = sumatoriaAy+(parseDouble(yRectanguloy)*-areaR);
                     }
                     
                     contador++;
-                    
-                    System.out.println("Centros "+centrosFiguras[i]);
-                    System.out.println("CentrosTamaño "+centrosFiguras.length);
-                    System.out.println("DatosTri "+datosTri[i]);
+
                     
                 }
                     System.out.println("Contador: "+contador);
@@ -383,16 +396,108 @@ public class Centroide extends VBox {
                         sumatoriaAx = sumatoriaAx+(parseDouble(xTriangulox)*areaR);
                         sumatoriaAy = sumatoriaAy+(parseDouble(yTrianguloy)*areaR);
                     } else {
-                        sumatoriaAx = sumatoriaAx+(parseDouble(xTriangulox)*(-areaR));
-                        sumatoriaAy = sumatoriaAx+(parseDouble(yTrianguloy)*(-areaR));
+                        sumatoriaAx = sumatoriaAx+(parseDouble(xTriangulox)*-areaR);
+                        sumatoriaAy = sumatoriaAy+(parseDouble(yTrianguloy)*-areaR);
                     }
                     
-                    System.out.println("Centros "+centrosFiguras[i]);
                 }
+                    
                 
-                } 
+                } else {
+                    
+                    int cantidad = datosRect.length;
+                centrosFiguras = new String[cantidad];
+                areasFiguras = new String[cantidad];
+                
+                    if (datosRect != null) {
+                    for (int i = 0; i < datosRect.length; i++) {
+                    String datosRectangulo = datosRect[i];
+                    String baseRectangulo;
+                    String alturaRectangulo;
+                    String operacionRectangulo;
+                    String xDist;
+                    String yDist;
+                 
+                    int inicioBase = datosRectangulo.indexOf("b");
+                    int finBase = datosRectangulo.indexOf(",");
+
+                    int inicioAltura = datosRectangulo.indexOf("a");
+                    int finAltura = datosRectangulo.indexOf("$"); 
+
+                    int inicioOpeRec = datosRectangulo.indexOf("$");
+                    int finOpeRec = datosRectangulo.indexOf("x");
+                    
+                    int inicioX = datosRectangulo.indexOf("x");
+                    int finX = datosRectangulo.indexOf("y");
+                    
+                    int inicioY = datosRectangulo.indexOf("y");
+
+                    baseRectangulo = datosRectangulo.substring(inicioBase +1, finBase);
+                    alturaRectangulo = datosRectangulo.substring(inicioAltura +1, finAltura);
+                    operacionRectangulo = datosRectangulo.substring(inicioOpeRec +1, finOpeRec);
+                    xDist = datosRectangulo.substring(inicioX +1, finX);
+                    yDist = datosRectangulo.substring(inicioY +1);
+                    
+                    String centros = calcularCentroideRect(baseRectangulo, alturaRectangulo, xDist, yDist);
+                    String areas = calcularAreaRectangulo(baseRectangulo, alturaRectangulo, operacionRectangulo);
+                    Double areaR = calcularAreaRectangulo(parseDouble(baseRectangulo), parseDouble(alturaRectangulo));
+                    if (operacionRectangulo.equals("s")) {
+                        sumatoriaAreas = sumatoriaAreas + areaR;
+                    } else {
+                        sumatoriaAreas = sumatoriaAreas - areaR;
+                    }
+                    centrosFiguras[i] = centros;                    
+                    areasFiguras[i] = areas;
+                    
+                    String datosRectangulox = centros;
+                    
+                    int inicioRectangulox = datosRectangulox.indexOf("x");
+                    int finRectangulox = datosRectangulox.indexOf(",");
+
+                    int inicioRectanguloy = datosRectangulox.indexOf("y");
+
+                    //int inicioOpeTriangulo = datosTriangulo.indexOf("$");
+                        
+                    String xRectangulox = datosRectangulox.substring(inicioRectangulox +1, finRectangulox);
+                    String yRectanguloy = datosRectangulox.substring(inicioRectanguloy +1);
+                    
+                    if (operacionRectangulo.equals("s")) {
+                        sumatoriaAx = sumatoriaAx+(parseDouble(xRectangulox)*areaR);
+                        sumatoriaAy = sumatoriaAy+(parseDouble(yRectanguloy)*areaR);
+                    } else {
+                        sumatoriaAx = sumatoriaAx+(parseDouble(xRectangulox)*-areaR);
+                        sumatoriaAy = sumatoriaAy+(parseDouble(yRectanguloy)*-areaR);
+                    }
+                    
+                    contador++;
+
+                    
+                }
+                    }
+                }
                 System.out.println("Contador "+contador);
-            }    
+               
+
+            lblAreas.setText("ΣA: "+sumatoriaAreas);
+            lblAreasx.setText("ΣXA: "+sumatoriaAx);
+            lblAreasy.setText("ΣYA: "+sumatoriaAy);
+            
+                    String stCentroide = calcularCentroide(sumatoriaAreas.toString(), sumatoriaAx.toString(), sumatoriaAy.toString());
+
+                    Double xDist;
+                    Double yDist;
+                    
+                    int inicioX = stCentroide.indexOf("x");
+                    int finX = stCentroide.indexOf("y");
+                    
+                    int inicioY = stCentroide.indexOf("y");
+
+                    xDist = parseDouble(stCentroide.substring(inicioX +1, finX));
+                    yDist = parseDouble(stCentroide.substring(inicioY +1));
+            
+                    lblCentroideX.setText("X = "+df.format(xDist));
+                    lblCentroideY.setText("Y = "+df.format(yDist));
+            
             
             System.out.println("Suma Areas "+sumatoriaAreas);
             System.out.println("Suma Areasx "+sumatoriaAx);
@@ -452,9 +557,9 @@ public class Centroide extends VBox {
                                 mostrarDialogo("Triángulo "+k,"t",k);
                             }
                 }else{
-                    if (nCir > 0) {
-                        for (int j = 1; j <= nCir; j++) {
-                            mostrarDialogo("Circulo "+j,"c",j);
+                    if (nRect > 0) {
+                        for (int j = 1; j <= nRect; j++) {
+                            mostrarDialogo("Rectangulo "+j,"r",j);
                         }
                     } else {
                         if (nTri > 0) {
@@ -468,7 +573,7 @@ public class Centroide extends VBox {
                 }
             }
             datos="";
-            
+                        
 
         }
         
@@ -530,13 +635,13 @@ public class Centroide extends VBox {
                     
                     if (!txtDistanciax.getText().isEmpty() && !txtDistanciay.getText().isEmpty() ) {
                         x = txtDistanciax.getText();
-                        x = txtDistanciay.getText();
+                        y = txtDistanciay.getText();
                     } else {
                         if (!txtDistanciax.getText().isEmpty()) {
                             x = txtDistanciax.getText();
                         }
                         if (!txtDistanciay.getText().isEmpty()) {
-                            x = txtDistanciay.getText();
+                            y = txtDistanciay.getText();
                         }
                     }
                     
@@ -591,6 +696,18 @@ public class Centroide extends VBox {
                 
                         
     }
+    
+    public String calcularCentroide(String areas, String ax, String ay) {
+        
+        Double xBarra = parseDouble(ax)/parseDouble(areas);
+        Double yBarra = parseDouble(ay)/parseDouble(areas);
+        
+        String centroide = "x"+xBarra.toString()+"y"+yBarra.toString();
+        
+        return centroide;
+
+    }
+    
     public String calcularCentroideRect(String base, String altura, String xDist, String yDist) {
         
         if (xDist == "" & yDist == "") {
