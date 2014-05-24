@@ -23,6 +23,7 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -38,6 +39,9 @@ public class RespectoUnEje extends VBox {
     
     final Font metroFont = Font.loadFont(
       Fxtructural.class.getResource("SEGOEUIL.ttf").toExternalForm(), 22);
+    
+    Label lblMomento = new Label();
+    Label lblResultado = new Label();
     
     public VBox RespectoUnEje(){
     
@@ -102,6 +106,12 @@ public class RespectoUnEje extends VBox {
         
         TextField txtFuerzaz = new TextField();
         txtFuerzaz.setPromptText("z");
+        
+        VBox vbDetalle = new VBox();
+        vbDetalle.getChildren().addAll(lblMomento, lblResultado);
+        vbDetalle.setPadding(new Insets(15, 0, 15, 0));
+        vbDetalle.setAlignment(Pos.BASELINE_CENTER);
+        vbDetalle.setSpacing(10);
         
         //Calculo respecto a un eje
         Button btnCalcular2 = new Button("Calcular");
@@ -175,7 +185,9 @@ public class RespectoUnEje extends VBox {
             
             
             double momento = ((momentoi*lambdaBCx)+(momentoj*lambdaBCy)+(momentok*lambdaBCz));
-
+            
+            lblMomento.setText("Momento");
+            lblResultado.setText(df.format(momento));
             System.out.println("El lambda es: "+lambdaBCx +","+lambdaBCy+","+lambdaBCz);
             System.out.println("Modulo: "+modulo);
             System.out.println(brazoi+"i + "+brazoj+"j + "+brazok+"k");
@@ -199,7 +211,7 @@ public class RespectoUnEje extends VBox {
         hbFuerza.setPadding(new Insets(15, 0, 15, 0));
         hbFuerza.setSpacing(10);
         
-        vBox22.getChildren().addAll(lblTitulo22,hbInicio, lblTitulo23, hbFin, lblTitulo24, hbBrazo,lblTitulo25,hbFuerza, btnCalcular2);
+        vBox22.getChildren().addAll(lblTitulo22,hbInicio, lblTitulo23, hbFin, lblTitulo24, hbBrazo,lblTitulo25,hbFuerza, btnCalcular2, vbDetalle);
         vBox22.setPadding(new Insets(15, 12, 15, 12));
         
         return vBox22;
