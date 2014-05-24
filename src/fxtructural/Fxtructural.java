@@ -69,9 +69,17 @@ public class Fxtructural extends Application {
         tabPane.getTabs().addAll(tab1, tab2, tab3);
         tabPane.getStyleClass().add(STYLE_CLASS_FLOATING);
         
+        Image imgUfg = new Image("img/ufg.png");
+        ImageView imgViewUfg = new ImageView(imgUfg);
+        HBox hbImg = new HBox();
+        hbImg.getChildren().add(imgViewUfg);
+        hbImg.setAlignment(Pos.BASELINE_CENTER);
+        
         BorderPane contenido = new BorderPane();
         contenido.setCenter(tabPane);
         contenido.setTop(crearEncabezado(primaryStage));
+        contenido.setBottom(hbImg);
+        
         
         contenido.setOnMousePressed((MouseEvent event) -> {
             xOffset = event.getSceneX();
@@ -82,7 +90,7 @@ public class Fxtructural extends Application {
             primaryStage.setY(event.getScreenY() - yOffset);
         });
         
-        Scene scene = new Scene(contenido, 500, 500);
+        Scene scene = new Scene(contenido, 500, 530);
         
         // Transparent scene and stage
         scene.setFill(Color.TRANSPARENT);
