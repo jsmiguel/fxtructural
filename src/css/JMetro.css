@@ -8,8 +8,8 @@
 
 .root{
     -fx-background-color: white;
-    -fx-focus-color: transparent;
-    -fx-faint-focus-color: trasparent;
+    -fx-focus-color: white;
+    -fx-faint-focus-color: white;
     -fx-font-family: "Segoe UI";
 }
 
@@ -20,6 +20,7 @@
 .tab {
       -fx-color: white;
       -fx-background-radius: 0, 0;
+      -fx-cursor: hand;
 }
 .tab:selected {
     -fx-background-radius: 0, 0;
